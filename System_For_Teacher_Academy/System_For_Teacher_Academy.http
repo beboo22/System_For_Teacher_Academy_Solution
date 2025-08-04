@@ -1,0 +1,6 @@
+@System_For_Teacher_Academy_HostAddress = http://localhost:5121
+
+GET {{System_For_Teacher_Academy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
