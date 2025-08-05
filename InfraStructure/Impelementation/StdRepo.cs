@@ -10,16 +10,17 @@ using System.Threading.Tasks;
 
 namespace InfraStructure.Impelementation
 {
-    internal class StdRepo : IStdRepo
+    internal class StdRepo : ReadGenricRepo<StudentEntity>, IStdRepo
     {
         SystemDbContext _context;
 
-        public StdRepo(SystemDbContext context)
+        public StdRepo(SystemDbContext context):base(context)
         {
             _context = context;
         }
 
-        public async Task AddAsync(StudentEntity entity)
+
+        public async override Task AddAsync(StudentEntity entity)
         {
             if (entity == null)
             {
@@ -27,7 +28,7 @@ namespace InfraStructure.Impelementation
             }
             await _context.students.AddAsync(entity.Students);
         }
-        public void UpdateAsync(StudentEntity entity)
+        public override void UpdateAsync(StudentEntity entity)
         {
             if (entity == null)
             {
@@ -44,32 +45,19 @@ namespace InfraStructure.Impelementation
             }
         }
 
-        public void DeleteAsync(int id)
-        {
-            var student = _context.students.Find(id);
-            if (student != null)
-            {
-                _context.students.Remove(student);
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Student with ID {id} not found.");
-            }
-        }
-
-        public async Task<bool> ExistsAsync(int id)
+        public async override Task<bool> ExistsAsync(int id)
         {
             var exists = await _context.students.AnyAsync(s => s.Id == id);
             return exists;
         }
 
-        public async Task<IQueryable<StudentEntity>> GetAllAsync()
+        public override IQueryable<StudentEntity> GetAllAsync()
         {
-            var students = await _context.students.ToListAsync();
+            var students = _context.students.ToList();
             return students.Select(s => new StudentEntity(s)).AsQueryable();
         }
 
-        public async Task<StudentEntity> GetByIdAsync(int id)
+        public override async Task<StudentEntity> GetByIdAsync(int id)
         {
             var student = await _context.students.FindAsync(id);
             if (student == null)
@@ -85,8 +73,8 @@ namespace InfraStructure.Impelementation
                 .Where(e => e.StdId == studentId)
                 .Include(e => e.Course)
                 .Select(e => e.Course);
-              
-            return await courses.ToListAsync(); 
+
+            return await courses.ToListAsync();
         }
 
         public async Task<IEnumerable<ExamSubmission>> GetExamSubmissionForStudent(int studentId)

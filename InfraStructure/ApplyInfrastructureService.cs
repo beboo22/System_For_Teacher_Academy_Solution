@@ -14,7 +14,9 @@ namespace Infrastructure
             //services.applayInfrastructureService(configuration);
 
             //connect to the database
-            services.AddDbContext<SystemDbContext>(options =>
+            services.AddDbContext<ReadSystemDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<WriteSystemDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
             // Register other infrastructure services here
