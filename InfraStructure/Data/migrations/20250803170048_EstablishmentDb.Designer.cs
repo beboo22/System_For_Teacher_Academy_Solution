@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InfraStructure.Data.migrations
 {
-    [DbContext(typeof(SystemDbContext))]
+    [DbContext(typeof(WriteSystemDbContext))]
     [Migration("20250803170048_EstablishmentDb")]
     partial class EstablishmentDb
     {

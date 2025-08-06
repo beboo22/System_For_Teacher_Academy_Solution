@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfraStructure.Data.migrations
 {
     [DbContext(typeof(WriteSystemDbContext))]
-    [Migration("20250803170804_StudentsTable")]
-    partial class StudentsTable
+    [Migration("20250806150459_updateAttributes")]
+    partial class updateAttributes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,8 @@ namespace InfraStructure.Data.migrations
                     b.HasKey("ID");
 
                     b.HasIndex("ExamSubmissionId");
+
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("answers");
                 });
@@ -173,15 +175,8 @@ namespace InfraStructure.Data.migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("text");
 
-                    b.Property<int>("Marks")
-                        .HasColumnType("integer");
-
                     b.Property<int>("MarksObtained")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Options")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("timestamp with time zone");
@@ -662,6 +657,14 @@ namespace InfraStructure.Data.migrations
                         .HasForeignKey("ExamSubmissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domin.Entity.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
 
                     b.Navigation("examSubmission");
                 });

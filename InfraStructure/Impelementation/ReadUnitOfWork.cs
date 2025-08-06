@@ -25,7 +25,7 @@ namespace InfraStructure.Impelementation
             throw new NotImplementedException();
         }
 
-        public IReadGenericRepo<T> GetWriteGenericRepo<T>() where T : BaseEntity
+        public IReadGenericRepo<T> GetReadGenericRepo<T>() where T : BaseEntity
         =>(IReadGenericRepo<T>)_repositories.GetOrAdd(typeof(T), _ => new ReadGenricRepo<T>(_Rcontext));
     }
 }

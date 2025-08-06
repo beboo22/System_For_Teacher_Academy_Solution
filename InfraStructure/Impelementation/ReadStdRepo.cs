@@ -5,58 +5,25 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace InfraStructure.Impelementation
 {
-    internal class StdRepo : ReadGenricRepo<StudentEntity>, IStdRepo
+    internal class ReadStdRepo : ReadGenricRepo<StudentEntity>,IReadStdRepo
     {
-        SystemDbContext _context;
-
-        public StdRepo(SystemDbContext context):base(context)
+        private readonly ReadSystemDbContext _context;
+        public ReadStdRepo(ReadSystemDbContext context):base(context) 
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-
-        public async override Task AddAsync(StudentEntity entity)
+        public override IQueryable<StudentEntity> GetAll()
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Entity cannot be null");
-            }
-            await _context.students.AddAsync(entity.Students);
-        }
-        public override void UpdateAsync(StudentEntity entity)
-        {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Entity cannot be null");
-            }
-            var student = _context.students.Find(entity.Students.Id);
-            if (student != null)
-            {
-                _context.students.Update(entity.Students);
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Student with ID {entity.Students.Id} not found.");
-            }
-        }
-
-        public async override Task<bool> ExistsAsync(int id)
-        {
-            var exists = await _context.students.AnyAsync(s => s.Id == id);
-            return exists;
-        }
-
-        public override IQueryable<StudentEntity> GetAllAsync()
-        {
-            var students = _context.students.ToList();
+            var students = _context.students;
             return students.Select(s => new StudentEntity(s)).AsQueryable();
         }
-
         public override async Task<StudentEntity> GetByIdAsync(int id)
         {
             var student = await _context.students.FindAsync(id);
@@ -103,6 +70,5 @@ namespace InfraStructure.Impelementation
                 .Include(p => p.lesson);
             return await lessons.ToListAsync();
         }
-
     }
 }

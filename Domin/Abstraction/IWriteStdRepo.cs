@@ -1,5 +1,4 @@
 ﻿using Domin.Entity;
-using Domin.Entity.identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domin.Abstraction
 {
-    public interface IReadGenericRepo<T> where T : BaseEntity
+    public interface IWriteStdRepo : IWriteGenericRepo<StudentEntity>
     {
-        Task<T> GetByIdAsync(int id);
-        IQueryable<T> GetAll();
         
+
     }
 }

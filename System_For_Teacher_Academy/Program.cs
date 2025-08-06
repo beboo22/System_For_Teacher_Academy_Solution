@@ -1,4 +1,5 @@
 using Infrastructure;
+using Service;
 namespace System_For_Teacher_Academy
 {
     public class Program
@@ -27,8 +28,7 @@ namespace System_For_Teacher_Academy
             builder.Services.AddSwaggerGen();
 
             builder.Services.applayInfrastructureService(builder.Configuration);
-
-
+            builder.Services.ApplyServiceForServiceLayer(builder.Configuration);
 
             var app = builder.Build();
 

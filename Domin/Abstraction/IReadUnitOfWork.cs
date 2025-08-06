@@ -10,7 +10,7 @@ namespace Domin.Abstraction
     public interface IReadUnitOfWork : IDisposable
     {
 
-        IReadGenericRepo<T> GetWriteGenericRepo<T>() where T : BaseEntity;
+        IReadGenericRepo<T> GetReadGenericRepo<T>() where T : BaseEntity;
 
     }
 }

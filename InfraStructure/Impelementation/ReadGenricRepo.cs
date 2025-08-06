@@ -21,7 +21,7 @@ namespace InfraStructure.Impelementation
 
         
 
-        public virtual IQueryable<T> GetAllAsync()
+        public virtual IQueryable<T> GetAll()
         {
             return  _context.Set<T>().AsQueryable();
         }
